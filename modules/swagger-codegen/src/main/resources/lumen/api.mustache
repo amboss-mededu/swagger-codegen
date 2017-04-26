@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request as HttpRequest;
 
 {{#operations}}class {{classname}} extends Controller
 {
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Request;
   {{/pathParams}}   *
      * @return Http response
      */
-    public function {{operationId}}({{#pathParams}}${{paramName}}{{#hasMore}}, {{/hasMore}}{{/pathParams}})
+    public function {{operationId}}(HttpRequest $request{{#pathParams}}, ${{paramName}}{{#hasMore}}, {{/hasMore}}{{/pathParams}})
     {
         $input = Request::all();
 
@@ -121,7 +122,14 @@ use Illuminate\Support\Facades\Request;
         {{/pathParams}}
         {{/allParams}}
 
-        return response('How about implementing {{nickname}} as a {{httpMethod}} method ?');
+        {{#examples}}
+        {{! TODO: resolve the Accept type and return the appropriate example. }}
+            return response( $request->header('Accept') );
+        {{/examples}}
+        {{^examples}}
+            return response('How about implementing {{nickname}} as a {{httpMethod}} method ?');
+        {{/examples}}
+
     }
     {{/operation}}
 }
