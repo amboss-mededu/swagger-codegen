@@ -1,10 +1,16 @@
 package io.swagger.codegen.languages;
 
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
 import io.swagger.codegen.*;
 import io.swagger.models.properties.*;
 
 import java.util.*;
 import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +83,20 @@ public class LumenServerCodegen extends AbstractPhpCodegen
          * are available in models, apis, and supporting files
          */
         additionalProperties.put("apiVersion", apiVersion);
+
+        additionalProperties.put("lambdaEscapeDoubleQuote", new Mustache.Lambda(){
+            @Override
+            public void execute(Template.Fragment fragment, Writer writer) throws IOException {
+                writer.write(fragment.execute().replaceAll("\"", Matcher.quoteReplacement("\\\"")));
+            }
+        });
+
+        additionalProperties.put("lambdaRemoveLineBreak", new Mustache.Lambda() {
+            @Override
+            public void execute(Template.Fragment fragment, Writer writer) throws IOException {
+                writer.write(fragment.execute().replaceAll("\\r|\\n", ""));
+            }
+        });
 
         /*
          * Supporting Files.  You can write single files for the generator with the
