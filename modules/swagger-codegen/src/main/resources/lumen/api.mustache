@@ -26,7 +26,7 @@ use Illuminate\Http\Request as HttpRequest;
   {{/pathParams}}   *
      * @return Http response
      */
-    public function {{operationId}}(HttpRequest $request{{#pathParams}}, ${{paramName}}{{#hasMore}}, {{/hasMore}}{{/pathParams}})
+    public function {{operationId}}(HttpRequest $request{{#hasPathParams}}, {{/hasPathParams}}{{#pathParams}}${{paramName}}{{#hasMore}}, {{/hasMore}}{{/pathParams}})
     {
         $input = Request::all();
 
@@ -123,8 +123,7 @@ use Illuminate\Http\Request as HttpRequest;
         {{/allParams}}
 
         {{#examples}}
-        {{! TODO: resolve the Accept type and return the appropriate example. }}
-            return response( $request->header('Accept') );
+            return response({{{example}}})->header('Content-Type', '{{{contentType}}}');
         {{/examples}}
         {{^examples}}
             return response('How about implementing {{nickname}} as a {{httpMethod}} method ?');
