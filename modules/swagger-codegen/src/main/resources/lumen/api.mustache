@@ -123,7 +123,7 @@ use Illuminate\Http\Request as HttpRequest;
         {{/allParams}}
 
         {{#examples}}
-            return response({{{example}}})->header('Content-Type', '{{{contentType}}}');
+            return response({{{example}}})->header('Content-Type', '{{{contentType}}}')->header('Access-Control-Allow-Origin', '*');
         {{/examples}}
         {{^examples}}
             return response('How about implementing {{nickname}} as a {{httpMethod}} method ?');
